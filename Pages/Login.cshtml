@@ -1,0 +1,8 @@
+@page
+@model LoginModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<h2>Login</h2>
+<a class="btn btn-primary" href="@Url.Page("/Index", new { handler = "Login" })">Login with Microsoft</a>

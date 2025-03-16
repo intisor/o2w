@@ -1,0 +1,57 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Upcoming Events";
+}
+
+<div class="container mt-4">
+    <h2 class="text-center text-primary">📅 Your Upcoming Events</h2>
+
+    @if (Model.Events.Count == 0)
+    {
+        <div class="alert alert-info text-center mt-3">
+            No events found. Create one in Outlook!
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var eventItem in Model.Events)
+            {
+                <div class="col-md-6 col-lg-4">
+                    <div class="card shadow-sm border-0 rounded mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title text-dark">@eventItem.Title</h5>
+                            <p class="card-text text-muted">
+                                <strong>📆 Date:</strong> @eventItem.StartTime.ToString("dddd, MMMM dd, yyyy") <br>
+                                <strong>⏰ Time:</strong> @eventItem.StartTime.ToString("hh:mm tt") <br>
+                            </p>
+                            @if (!string.IsNullOrEmpty(eventItem.MeetingLink))
+                            {
+                                <a href="@eventItem.MeetingLink" target="_blank" class="btn btn-outline-primary btn-sm">🔗 Join Meeting</a>
+                            }
+                            <a href="https://wa.me/?text=@Uri.EscapeDataString($"📅 Reminder!\n{eventItem.Title}\non {eventItem.StartTime:dddd, MMM dd, yyyy} at {eventItem.StartTime:hh:mm tt}\nJoin: {eventItem.MeetingLink}")"
+                               class="btn btn-success btn-sm mt-2" target="_blank">
+                                📤 Share to WhatsApp
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+
+<a href="https://outlook.live.com" class="outlook-float" target="_blank">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/Outlook.svg" alt="Outlook" width="50">
+</a>
+
+<style>
+    .outlook-float {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1000;
+    }
+</style>
