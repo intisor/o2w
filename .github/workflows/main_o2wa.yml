@@ -40,7 +40,7 @@ jobs:
     needs: build
     environment:
       name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+      url: 'https://o2w.me'
     
     steps:
       - name: Download artifact from build job
