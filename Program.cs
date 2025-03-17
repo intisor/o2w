@@ -36,7 +36,19 @@ builder.Services.AddScoped<GraphService>();
 
 var app = builder.Build();
 
+
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapRazorPages();
+app.Use(async (context, next) =>
+{
+    var request = context.Request;
+    if (request.Host.Host == "o2wa.azurewebsites.net")
+    {
+        var newUrl = $"https://o2w.me{request.Path}{request.QueryString}";
+        context.Response.Redirect(newUrl, permanent: true);
+        return;
+    }
+    await next();
+});
 app.Run();
