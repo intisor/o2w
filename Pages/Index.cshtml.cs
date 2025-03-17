@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -8,8 +7,7 @@ public class IndexModel : PageModel
 {
     private readonly GraphService _graphService;
     public List<CalendarEvent> Events { get; set; } = new List<CalendarEvent>();
-    [TempData]
-    public string? ErrorMessage { get; set; }
+    public string LatestWhatsAppLink { get; set; }
 
     public IndexModel(GraphService graphService)
     {
@@ -18,19 +16,26 @@ public class IndexModel : PageModel
 
     public async Task<IActionResult> OnGetAsync()
     {
+        if (!User.Identity.IsAuthenticated)
+        {
+            return Challenge();
+        }
+
         try
         {
             Events = await _graphService.GetUserEventsAsync();
-            return Page();
+            LatestWhatsAppLink = TempData["LatestWhatsAppLink"] as string;
         }
         catch (UnauthorizedAccessException)
         {
-            return Challenge(OpenIdConnectDefaults.AuthenticationScheme);
+            return Challenge(); // ✅ Force user to log in again if token is missing or expired
         }
         catch (Exception)
         {
-            ErrorMessage = "Failed to retrieve calendar events. Please try again.";
-            return Page();
+            ModelState.AddModelError(string.Empty, "Error retrieving events. Please log in again.");
         }
+
+
+        return Page();
     }
 }

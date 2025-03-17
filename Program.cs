@@ -16,7 +16,7 @@ builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
 builder.Services.AddRazorPages();
 
 //  Register Microsoft Graph's Authentication Provider
-// builder.Services.AddScoped<IAuthenticationProvider, TokenAcquisitionAuthenticationProvider>();
+builder.Services.AddScoped<IAuthenticationProvider, TokenAcquisitionAuthenticationProvider>();
 
 //  Register GraphServiceClient with the correct `IRequestAdapter`
 builder.Services.AddScoped<IRequestAdapter>(provider =>

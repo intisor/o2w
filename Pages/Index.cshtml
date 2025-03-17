@@ -5,12 +5,21 @@
 }
 
 <div class="container mt-4">
-    <h2 class="text-center text-primary">📅 Your Upcoming Events</h2>
+    <h2 class="text-center text-primary">📅 Your Events</h2>
+
+    <!-- ✅ Show WhatsApp notification if a new event is detected -->
+    @if (!string.IsNullOrEmpty(Model.LatestWhatsAppLink))
+    {
+        <div class="alert alert-success text-center">
+            🎉 A new event was created!  
+            <a href="@Model.LatestWhatsAppLink" class="btn btn-success" target="_blank">📤 Share to WhatsApp</a>
+        </div>
+    }
 
     @if (Model.Events.Count == 0)
     {
         <div class="alert alert-info text-center mt-3">
-            No events found. Create one in Outlook!
+            No upcoming events.
         </div>
     }
     else
@@ -23,14 +32,10 @@
                         <div class="card-body">
                             <h5 class="card-title text-dark">@eventItem.Title</h5>
                             <p class="card-text text-muted">
-                                <strong>📆 Date:</strong> @eventItem.StartTime.ToString("dddd, MMMM dd, yyyy") <br>
-                                <strong>⏰ Time:</strong> @eventItem.StartTime.ToString("hh:mm tt") <br>
+                                📆 <strong>Date:</strong> @eventItem.StartTime.ToString("dddd, MMM dd") <br>
+                                ⏰ <strong>Time:</strong> @eventItem.StartTime.ToString("hh:mm tt") <br>
                             </p>
-                            @if (!string.IsNullOrEmpty(eventItem.MeetingLink))
-                            {
-                                <a href="@eventItem.MeetingLink" target="_blank" class="btn btn-outline-primary btn-sm">🔗 Join Meeting</a>
-                            }
-                            <a href="https://wa.me/?text=@Uri.EscapeDataString($"📅 Reminder!\n{eventItem.Title}\non {eventItem.StartTime:dddd, MMM dd, yyyy} at {eventItem.StartTime:hh:mm tt}\nJoin: {eventItem.MeetingLink}")"
+                            <a href="https://wa.me/?text=@Uri.EscapeDataString($"📅 {eventItem.Title}\n🗓 {eventItem.StartTime:dddd, MMM dd, yyyy}\n⏰ {eventItem.StartTime:hh:mm tt}\n🔗 {eventItem.MeetingLink}")"
                                class="btn btn-success btn-sm mt-2" target="_blank">
                                 📤 Share to WhatsApp
                             </a>
@@ -41,17 +46,3 @@
         </div>
     }
 </div>
-
-
-<a href="https://outlook.live.com" class="outlook-float" target="_blank">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/Outlook.svg" alt="Outlook" width="50">
-</a>
-
-<style>
-    .outlook-float {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        z-index: 1000;
-    }
-</style>
