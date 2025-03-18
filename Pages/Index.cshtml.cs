@@ -3,16 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 [Authorize]
-public class IndexModel : PageModel
+public class IndexModel(GraphService graphService) : PageModel
 {
-    private readonly GraphService _graphService;
-    public List<CalendarEvent> Events { get; set; } = new List<CalendarEvent>();
+    private readonly GraphService _graphService = graphService;
+    public List<CalendarEvent> Events { get; set; } = [];
     public string LatestWhatsAppLink { get; set; }
-
-    public IndexModel(GraphService graphService)
-    {
-        _graphService = graphService;
-    }
 
     public async Task<IActionResult> OnGetAsync()
     {
@@ -28,7 +23,7 @@ public class IndexModel : PageModel
         }
         catch (UnauthorizedAccessException)
         {
-            return Challenge(); // ✅ Force user to log in again if token is missing or expired
+            return Challenge(); 
         }
         catch (Exception)
         {

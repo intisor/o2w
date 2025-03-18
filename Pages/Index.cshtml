@@ -7,7 +7,6 @@
 <div class="container mt-4">
     <h2 class="text-center text-primary">📅 Your Events</h2>
 
-    <!-- ✅ Show WhatsApp notification if a new event is detected -->
     @if (!string.IsNullOrEmpty(Model.LatestWhatsAppLink))
     {
         <div class="alert alert-success text-center">
@@ -35,7 +34,7 @@
                                 📆 <strong>Date:</strong> @eventItem.StartTime.ToString("dddd, MMM dd") <br>
                                 ⏰ <strong>Time:</strong> @eventItem.StartTime.ToString("hh:mm tt") <br>
                             </p>
-                            <a href="https://wa.me/?text=@Uri.EscapeDataString($"📅 {eventItem.Title}\n🗓 {eventItem.StartTime:dddd, MMM dd, yyyy}\n⏰ {eventItem.StartTime:hh:mm tt}\n🔗 {eventItem.MeetingLink}")"
+                            <a href="https://wa.me/?text=@Uri.EscapeDataString($"📅 {eventItem.Title}\n {eventItem.StartTime:dddd, MMM dd, yyyy}\n⏰ {eventItem.StartTime:hh:mm tt}\n🔗 {eventItem.MeetingLink}")"
                                class="btn btn-success btn-sm mt-2" target="_blank">
                                 📤 Share to WhatsApp
                             </a>
