@@ -7,18 +7,18 @@ using Microsoft.Kiota.Abstractions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//  Configure MSAL authentication with Microsoft Graph API
+// Configure MSAL authentication with Microsoft Graph API
 builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
     .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"))
-    .EnableTokenAcquisitionToCallDownstreamApi(["User.Read", "Calendars.Read"])
+    .EnableTokenAcquisitionToCallDownstreamApi(new[] { "User.Read", "Calendars.Read" })
     .AddInMemoryTokenCaches();
 
 builder.Services.AddRazorPages();
 
-//  Register Microsoft Graph's Authentication Provider
+// Register Microsoft Graph's Authentication Provider
 builder.Services.AddScoped<IAuthenticationProvider, TokenAcquisitionAuthenticationProvider>();
 
-//  Register GraphServiceClient with the correct `IRequestAdapter`
+// Register GraphServiceClient with the correct `IRequestAdapter`
 builder.Services.AddScoped<IRequestAdapter>(provider =>
 {
     var authProvider = provider.GetRequiredService<IAuthenticationProvider>();
@@ -31,11 +31,10 @@ builder.Services.AddScoped<GraphServiceClient>(provider =>
     return new GraphServiceClient(requestAdapter);
 });
 
-//  Register GraphService
+// Register GraphService
 builder.Services.AddScoped<GraphService>();
 
 var app = builder.Build();
-
 
 app.UseAuthentication();
 app.UseAuthorization();

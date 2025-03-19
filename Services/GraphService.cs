@@ -65,6 +65,20 @@ public class GraphService
 
         await _httpClient.PostAsync(DiscordWebhookUrl, content);
     }
+
+    public async Task<bool> TestDiscordWebhookAsync()
+    {
+        var discordMessage = new
+        {
+            content = "This is a test message from the OutlookToWA application."
+        };
+
+        var json = JsonConvert.SerializeObject(discordMessage);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+        var response = await _httpClient.PostAsync(DiscordWebhookUrl, content);
+        return response.IsSuccessStatusCode;
+    }
 }
 
 
